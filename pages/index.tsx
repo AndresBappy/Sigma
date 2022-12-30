@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { Inter } from '@next/font/google';
 import styles from '../styles/Home.module.css';
+import Link from 'next/link';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -118,8 +119,24 @@ export default function Home() {
           </a>
         </div>
       </main> */}
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-      <button className="btn btn-primary">Button</button>
+      <div className="bg-[url('/images/background-home.png')] image-full h-full flex items-end">
+        <div className="card w-96 bg-white shadow-xl">
+          <div className="card-body">
+            <h1 className="card-title text-2xl font-logo font-bold text-custom-purple">BAPPY</h1>
+            <h2 className="text-2xl text-gray-title">
+              Dile <span className="font-bold">¡hola!</span> a la nueva forma de apostar con amigos.
+            </h2>
+            <p className="text-gray-text">
+              Una forma fácil y divertida de ganar, tus apuestas preferidas en deportes, eventos y más...
+            </p>
+            <div className="card-actions justify-center">
+              <Link href="/register" className="btn btn-primary">
+                Empieza ahora
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

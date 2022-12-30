@@ -7,6 +7,12 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ['Poppins', ...defaultTheme.fontFamily.sans],
+        logo: ['"M PLUS Rounded 1c"', ...defaultTheme.fontFamily.sans],
+      },
+      colors: {
+        'custom-purple': '#6926FF',
+        'gray-title': '#3A3939',
+        'gray-text': '#656565',
       },
     },
     container: {

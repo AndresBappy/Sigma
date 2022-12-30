@@ -8,6 +8,20 @@ html,
   height: 100%;
 }
 
+.btn-primary {
+  background: linear-gradient(92.61deg, #8e2de2 0%, #4a00e0 100%);
+  border-radius: 100px;
+  padding: 8px 50px;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(92.33deg, #f12711 0%, #f5af19 100%);
+}
+
+.btn-primary:active {
+  background: rgba(105, 38, 255, 0.54);
+}
+
 /* :root {
   --max-width: 1100px;
   --border-radius: 12px;
