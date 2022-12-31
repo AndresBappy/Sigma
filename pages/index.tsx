@@ -126,9 +126,7 @@ export default function Home() {
             <h2 className="text-2xl text-gray-title">
               Dile <span className="font-bold">¡hola!</span> a la nueva forma de apostar con amigos.
             </h2>
-            <p className="text-gray-text">
-              Una forma fácil y divertida de ganar, tus apuestas preferidas en deportes, eventos y más...
-            </p>
+            <p>Una forma fácil y divertida de ganar, tus apuestas preferidas en deportes, eventos y más...</p>
             <div className="card-actions justify-center">
               <Link href="/register" className="btn btn-primary">
                 Empieza ahora

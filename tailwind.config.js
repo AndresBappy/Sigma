@@ -11,8 +11,11 @@ module.exports = {
       },
       colors: {
         'custom-purple': '#6926FF',
+        'gray-background': '#F5F5F5',
         'gray-title': '#3A3939',
         'gray-text': '#656565',
+        'orange-text': '#FE4E12',
+        'purple-text': '#4B18BD',
       },
     },
     container: {
