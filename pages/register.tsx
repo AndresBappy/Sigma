@@ -4,7 +4,7 @@ import BackIcon from 'public/images/icons/back.svg';
 import React from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
-import Password from '../components/form/Password';
+import Password from 'components/form/Password';
 
 type Props = {};
 

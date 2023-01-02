@@ -1,7 +1,8 @@
+import { useRouter } from 'next/router';
 import React from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
-import Password from '../components/form/Password';
+import Password from 'components/form/Password';
 
 type Props = {};
 
@@ -18,6 +19,7 @@ const Login: React.FC<Props> = (props: Props) => {
     watch,
     formState: { errors },
   } = useForm<LoginForm>();
+  const router = useRouter();
 
   const onSubmit: SubmitHandler<LoginForm> = async (data: LoginForm) => {
     console.log(data);
