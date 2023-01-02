@@ -6,8 +6,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Poppins', ...defaultTheme.fontFamily.sans],
-        logo: ['"M PLUS Rounded 1c"', ...defaultTheme.fontFamily.sans],
+        // sans: ['Poppins', ...defaultTheme.fontFamily.sans],
+        // logo: ['"M PLUS Rounded 1c"', ...defaultTheme.fontFamily.sans],
       },
       colors: {
         'custom-purple': '#6926FF',
