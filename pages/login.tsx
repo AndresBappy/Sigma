@@ -23,6 +23,7 @@ const Login: React.FC<Props> = (props: Props) => {
 
   const onSubmit: SubmitHandler<LoginForm> = async (data: LoginForm) => {
     console.log(data);
+    router.push('/dashboard');
   };
 
   return (

@@ -14,8 +14,11 @@ module.exports = {
         'gray-background': '#F5F5F5',
         'gray-title': '#3A3939',
         'gray-text': '#656565',
+        'gray-background-2': '#242A3E',
         'orange-text': '#FE4E12',
         'purple-text': '#4B18BD',
+        'violet-gradient-to': '#4A00E0',
+        'purple-linear': 'linear-gradient(92.61deg, #8E2DE2 0%, #4A00E0 100%)',
       },
     },
     container: {

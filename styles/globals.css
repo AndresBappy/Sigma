@@ -29,6 +29,20 @@ body {
   background: rgba(105, 38, 255, 0.54);
 }
 
+.btn-secondary {
+  background: linear-gradient(92.33deg, #f12711 0%, #f5af19 100%);
+  border-radius: 100px;
+  padding: 8px 50px;
+}
+
+.btn-secondary:hover {
+  background: linear-gradient(92.61deg, #8e2de2 0%, #4a00e0 100%);
+}
+
+.btn-secondary:active {
+  background: rgba(105, 38, 255, 0.54);
+}
+
 /* https://gist.github.com/ffoodd/000b59f431e3e64e4ce1a24d5bb36034 */
 /*
 	Improved screen reader only CSS class
