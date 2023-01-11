@@ -6,7 +6,7 @@ type Props = {};
 
 const Dashboard: React.FC<Props> = (props: Props) => {
   return (
-    <div>
+    <div className="min-h-full">
       <BetCard
         background="/images/assets/bg-bet-1.jpg"
         title={'Champions League'}

@@ -1,6 +1,8 @@
-import { textColor } from 'constants/colors';
 import Image from 'next/image';
 import React from 'react';
+
+import { textColor } from 'constants/colors';
+import { backgroundType } from 'interfaces/bet';
 
 import Icon from './Icon';
 
@@ -22,8 +24,6 @@ type Props = {
   secondary?: string;
   secondaryIcon?: string;
 };
-
-type backgroundType = 'plain' | 'image';
 
 const BetCard: React.FC<Props> = ({
   title,
@@ -50,7 +50,6 @@ const BetCard: React.FC<Props> = ({
 
   return (
     <div className={`card w-96 shadow-xl mb-5 ${cardBackground} ${fontColor}`}>
-      <span className="sr-only text-white text-gray-text text-purple-text"></span>
       {type === 'image' && background && (
         <figure>
           <Image src={background} alt={title || ''} width={370} height={300} className="w-full h-auto" />
