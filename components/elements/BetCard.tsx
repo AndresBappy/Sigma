@@ -4,6 +4,7 @@ import React from 'react';
 import { textColor } from 'constants/colors';
 import { backgroundType } from 'interfaces/bet';
 
+import Link from 'next/link';
 import Icon from './Icon';
 
 type Props = {
@@ -90,16 +91,16 @@ const BetCard: React.FC<Props> = ({
         )}
         {primary && (
           <div className="card-actions">
-            <button className="btn btn-primary gap-2 w-full">
+            <Link href="/create" className="btn btn-primary gap-2 w-full">
               {primaryIcon && <Icon name={primaryIcon} fill={'fill-white'} />} {primary}
-            </button>
+            </Link>
           </div>
         )}
         {secondary && (
           <div className="card-actions">
-            <button className="btn btn-secondary gap-2 w-full">
+            <Link href="/open" className="btn btn-secondary gap-2 w-full">
               {secondaryIcon && <Icon name={secondaryIcon} fill={'fill-white'} />} {secondary}
-            </button>
+            </Link>
           </div>
         )}
       </div>
