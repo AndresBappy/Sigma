@@ -1,10 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import BackIcon from 'public/images/icons/back.svg';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 import Password from 'components/form/Password';
+import BackIcon from 'public/images/icons/back.svg';
 
 type Props = {};
 
@@ -24,9 +25,11 @@ const Register: React.FC<Props> = (props: Props) => {
     watch,
     formState: { errors },
   } = useForm<RegisterForm>();
+  const router = useRouter();
 
   const onSubmit: SubmitHandler<RegisterForm> = async (data: RegisterForm) => {
     console.log(data);
+    router.push('/profile');
   };
 
   console.log(errors);
