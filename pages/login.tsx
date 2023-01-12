@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -60,11 +61,21 @@ const Login: React.FC<Props> = (props: Props) => {
                 )}
               />
             </label>
-
-            <div className="card-actions justify-center">
+            <div className="flex justify-end mb-5">
+              <Link href={'/forgot'}>¿Olvidaste tu contraseña?</Link>
+            </div>
+            <div className="card-actions justify-center mb-5">
               <button className="btn btn-primary">Empieza ahora</button>
             </div>
           </form>
+          <div>
+            <p>
+              ¿Aún no tienes una cuenta?{' '}
+              <Link href="/register" className="font-bold text-purple-text">
+                Registrate
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>
