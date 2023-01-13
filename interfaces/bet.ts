@@ -8,6 +8,7 @@ export interface Bet {
   fill?: string;
   background?: string;
   description?: string;
+  content?: string;
   optionA?: string;
   optionAImage?: string;
   optionB?: string;

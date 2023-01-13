@@ -20,3 +20,5 @@ export const betsAtom = atom(async (get) => {
   });
   return results as Bet[];
 });
+
+export const currentBetAtom = atom<Bet>({} as Bet);

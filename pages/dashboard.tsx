@@ -1,17 +1,33 @@
 import { useAtom } from 'jotai';
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
 
 import BetCard from 'components/elements/BetCard';
-import { betsAtom } from 'state/bet';
+import { Bet } from 'interfaces/bet';
+import { betsAtom, currentBetAtom } from 'state/bet';
 
 type Props = {};
 
 const Dashboard: React.FC<Props> = (props: Props) => {
   const [bets] = useAtom(betsAtom);
+  const [currentBet, setCurrentBet] = useAtom(currentBetAtom);
+  const router = useRouter();
+
+  const handlePrimaryClick = async (bet: Bet) => {
+    await setCurrentBet(bet);
+  };
+
+  useEffect(() => {
+    if (currentBet.id) {
+      router.push('/create');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentBet]);
 
   return (
     <div className="min-h-full">
-      {!!bets.length && bets.map((bet) => <BetCard key={bet.id} {...bet} />)}
+      {!!bets.length &&
+        bets.map((bet) => <BetCard key={bet.id} {...bet} handlePrimaryClick={() => handlePrimaryClick(bet)} />)}
       <BetCard
         background="/images/assets/bg-bet-1.jpg"
         title={'Champions League'}

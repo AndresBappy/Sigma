@@ -28,9 +28,11 @@ const BetContent: React.FC<Props> = ({ description, content, optionA, optionAIma
     formState: { errors },
   } = useForm<BetForm>();
   const [dataSent, setDataSent] = useState(false);
+  const [formData, setFormData] = useState({} as BetForm);
 
   const onSubmit: SubmitHandler<BetForm> = async (data: BetForm) => {
     console.log(data);
+    setFormData(data);
     setDataSent(true);
   };
 
@@ -42,57 +44,51 @@ const BetContent: React.FC<Props> = ({ description, content, optionA, optionAIma
           content
         ) : (
           <>
-            Hiciste una apuesta por $200 apostando a que el AC MILLAN ganará el partido.
+            Hiciste una apuesta por ${formData.value} apostando a que el {formData.option === '0' ? optionA : optionB}{' '}
+            ganará el partido.
             <br />
             <br />
-            Espera a que @calofon acepte tu apuesta para completarla.
+            Espera a que @{formData.invite} acepte tu apuesta para completarla.
           </>
         )}
       </p>
-      <div className="flex gap-2 mb-7">
-        {optionA && (
-          <button className="flex justify-start	btn gap-2 bg-gray-background text-black-text">
-            {optionAImage && (
-              <span className="bg-white rounded-full block">
-                <Image src={optionAImage} width={30} height={30} alt={optionA} />
-              </span>
-            )}{' '}
-            <span>{optionA}</span>
-          </button>
-        )}
-        {optionB && (
-          <button className="flex justify-start	btn bg-gray-background gap-2 text-black-text">
-            {optionBImage && (
-              <span className="bg-white rounded-full block">
-                <Image src={optionBImage} width={30} height={30} alt={optionB} />
-              </span>
-            )}{' '}
-            <span>{optionB}</span>
-          </button>
-        )}
-      </div>
       {!dataSent && (
         <>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-control w-full max-w-xs mb-7">
-              <label>
+            <div className="form-control w-full  mb-7">
+              <div>
                 <div className="flex justify-between">
                   <span className="block px-5 pb-2"> Selecciona el ganador</span>
                   {errors.option && <span className="text-right text-orange-text">{errors.option.message}</span>}
                 </div>
-                <select
-                  className="select select-bordered w-full bg-white border-gray-text"
-                  {...register('option', { required: 'Requerido' })}
-                >
-                  <option disabled selected value="">
-                    Pick one
-                  </option>
-                  {!!optionA && <option value="0">{optionA}</option>}
-                  {!!optionB && <option value="1">{optionB}</option>}
-                </select>
-              </label>
+
+                <div className="flex flex-1 gap-2 radio-group">
+                  {optionA && (
+                    <label className="flex justify-start btn gap-2 bg-gray-background text-black-text">
+                      {optionAImage && (
+                        <span className="bg-white rounded-full block">
+                          <Image src={optionAImage} width={30} height={30} alt={optionA} />
+                        </span>
+                      )}{' '}
+                      <input {...register('option', { required: 'Requerido' })} type="radio" value="0" />
+                      <span>{optionA}</span>
+                    </label>
+                  )}
+                  {optionB && (
+                    <label className="flex justify-start btn bg-gray-background gap-2 text-black-text">
+                      {optionBImage && (
+                        <span className="bg-white rounded-full block">
+                          <Image src={optionBImage} width={30} height={30} alt={optionB} />
+                        </span>
+                      )}{' '}
+                      <input {...register('option', { required: 'Requerido' })} type="radio" value="1" />
+                      <span>{optionB}</span>
+                    </label>
+                  )}
+                </div>
+              </div>
             </div>
-            <div className="form-control w-full max-w-xs mb-7">
+            <div className="form-control w-full  mb-7">
               <label>
                 <div className="flex justify-between">
                   <span className="block px-5 pb-2">¿Cuánto quieres apostar?</span>
@@ -102,12 +98,12 @@ const BetContent: React.FC<Props> = ({ description, content, optionA, optionAIma
                 <input
                   type="text"
                   placeholder="$"
-                  className="input input-bordered w-full max-w-xs bg-white border-gray-text"
+                  className="input input-bordered w-full  bg-white border-gray-text"
                   {...register('value', { required: 'Requerido' })}
                 />
               </label>
             </div>
-            <div className="form-control w-full max-w-xs mb-7">
+            <div className="form-control w-full  mb-7">
               <label>
                 <div className="flex justify-between">
                   <span className="block px-5 pb-2">¿Con quién quieres apostar?</span>
@@ -117,7 +113,7 @@ const BetContent: React.FC<Props> = ({ description, content, optionA, optionAIma
                 <input
                   type="text"
                   placeholder=""
-                  className="input input-bordered w-full max-w-xs bg-white border-gray-text"
+                  className="input input-bordered w-full  bg-white border-gray-text"
                   {...register('invite', { required: 'Requerido' })}
                 />
               </label>

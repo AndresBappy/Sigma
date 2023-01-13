@@ -66,10 +66,24 @@ body {
 }
 
 .btn-sm {
-  border: none; 
+  border: none;
   padding: 4px 45px;
   background: #7edd89;
   border-radius: 100px;
+}
+
+.radio-group input[type='radio'] {
+  /* Add if not using autoprefixer */
+  -webkit-appearance: none;
+  appearance: none;
+  /* For iOS < 15 to remove gradient background */
+  background-color: #fff;
+  /* Not removed via appearance */
+  margin: 0;
+}
+
+.radio-group input[type='radio']:checked + span {
+  text-decoration: underline;
 }
 
 /* https://gist.github.com/ffoodd/000b59f431e3e64e4ce1a24d5bb36034 */

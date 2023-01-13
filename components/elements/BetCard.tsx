@@ -1,10 +1,9 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 
 import { textColor } from 'constants/colors';
 import { backgroundType } from 'interfaces/bet';
-
-import Link from 'next/link';
 import Icon from './Icon';
 
 type Props = {
@@ -24,6 +23,7 @@ type Props = {
   primaryIcon?: string;
   secondary?: string;
   secondaryIcon?: string;
+  handlePrimaryClick?: () => void;
 };
 
 const BetCard: React.FC<Props> = ({
@@ -43,6 +43,7 @@ const BetCard: React.FC<Props> = ({
   color = 'default',
   fill = 'default',
   type = 'image',
+  handlePrimaryClick,
 }: Props) => {
   const cardBackground =
     background && ((type === 'image' ? 'image-full' : '') || (type === 'plain' ? `bg-${textColor[background]}` : ''));
@@ -91,9 +92,9 @@ const BetCard: React.FC<Props> = ({
         )}
         {primary && (
           <div className="card-actions">
-            <Link href="/create" className="btn btn-primary gap-2 w-full">
+            <button className="btn btn-primary gap-2 w-full" onClick={handlePrimaryClick}>
               {primaryIcon && <Icon name={primaryIcon} fill={'fill-white'} />} {primary}
-            </Link>
+            </button>
           </div>
         )}
         {secondary && (
