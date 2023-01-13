@@ -1,3 +1,4 @@
+import { signIn, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -17,13 +18,27 @@ const Login: React.FC<Props> = (props: Props) => {
     control,
     register,
     handleSubmit,
-    watch,
+    setError,
     formState: { errors },
   } = useForm<LoginForm>();
   const router = useRouter();
+  const { data: session } = useSession();
+
+  if (session) {
+    router.push('/dashboard');
+  }
 
   const onSubmit: SubmitHandler<LoginForm> = async (data: LoginForm) => {
-    console.log(data);
+    const response = await signIn('credentials', {
+      redirect: false,
+      email: data.email,
+      password: data.password,
+      callbackUrl: `${window.location.origin}/user`,
+    });
+    if (response?.error) {
+      setError('email', { message: response.error });
+      return;
+    }
     router.push('/dashboard');
   };
 
