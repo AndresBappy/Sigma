@@ -1,4 +1,5 @@
 import { atom } from 'jotai';
+import { atomWithReset } from 'jotai/utils';
 
 import { Bet } from 'interfaces/bet';
 import { getBets } from 'services/bets/getBets';
@@ -21,4 +22,4 @@ export const betsAtom = atom(async (get) => {
   return results as Bet[];
 });
 
-export const currentBetAtom = atom<Bet>({} as Bet);
+export const currentBetAtom = atomWithReset<Bet>({} as Bet);

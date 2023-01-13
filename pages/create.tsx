@@ -1,18 +1,26 @@
+import { useResetAtom } from 'jotai/utils';
 import React from 'react';
 
-import Link from 'next/link';
-import BackIcon from 'public/images/icons/back.svg';
 import BetCreate from 'components/elements/BetCreate';
+import BackIcon from 'public/images/icons/back.svg';
+import { currentBetAtom } from 'state/bet';
 
 type Props = {};
 
-const create: React.FC<Props> = (props: Props) => {
+const Create: React.FC<Props> = (props: Props) => {
+  const resetCurrentBet = useResetAtom(currentBetAtom);
+
+  const handleClick = () => {
+    resetCurrentBet();
+  };
+
   return (
     <div className="h-full px-2 pt-9">
       <div className=" pb-5">
-        <Link href="/dashboard" className="btn btn-circle bg-white">
+        <button className="btn btn-circle bg-white" onClick={handleClick}>
           <BackIcon />
-        </Link>
+          <span className="sr-only">Back</span>
+        </button>
       </div>
 
       <BetCreate />
@@ -20,4 +28,4 @@ const create: React.FC<Props> = (props: Props) => {
   );
 };
 
-export default create;
+export default Create;
