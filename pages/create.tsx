@@ -1,5 +1,6 @@
 import { useResetAtom } from 'jotai/utils';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 import AccessDenied from 'components/elements/AccessDenied';
@@ -10,10 +11,12 @@ import { currentBetAtom } from 'state/bet';
 type Props = {};
 
 const Create: React.FC<Props> = (props: Props) => {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const resetCurrentBet = useResetAtom(currentBetAtom);
+  const router = useRouter();
 
   if (!session) {
+    router.push('/login');
     return (
       <div className="h-full px-2 pt-9">
         <AccessDenied />
