@@ -7,6 +7,7 @@ import Football from 'public/images/icons/football.svg';
 import Soccer from 'public/images/icons/soccer.svg';
 import Star from 'public/images/icons/star.svg';
 import Tennis from 'public/images/icons/tennis.svg';
+import Golf from 'public/images/icons/golf.svg';
 
 type iconType = {
   [key: string]: React.ElementType<HTMLElement & SVGElement>;
@@ -19,6 +20,7 @@ const icons: iconType = {
   football: Football,
   tennis: Tennis,
   bet: Bet,
+  golf: Golf,
 };
 
 type Props = {
