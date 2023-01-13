@@ -64,25 +64,25 @@ const BetContent: React.FC<Props> = ({ description, content, optionA, optionAIma
 
                 <div className="flex flex-1 gap-2 radio-group">
                   {optionA && (
-                    <label className="flex justify-start btn gap-2 bg-gray-background text-black-text">
+                    <label className="grid grid-cols-[1fr_0_2fr] flex-[50%] justify-start btn bg-gray-background text-black-text">
                       {optionAImage && (
                         <span className="bg-white rounded-full block">
                           <Image src={optionAImage} width={30} height={30} alt={optionA} />
                         </span>
                       )}{' '}
                       <input {...register('option', { required: 'Requerido' })} type="radio" value="0" />
-                      <span>{optionA}</span>
+                      <span className="text-start">{optionA}</span>
                     </label>
                   )}
                   {optionB && (
-                    <label className="flex justify-start btn bg-gray-background gap-2 text-black-text">
+                    <label className="grid grid-cols-[1fr_0_2fr] flex-[50%] justify-start btn bg-gray-background text-black-text">
                       {optionBImage && (
                         <span className="bg-white rounded-full block">
                           <Image src={optionBImage} width={30} height={30} alt={optionB} />
                         </span>
                       )}{' '}
                       <input {...register('option', { required: 'Requerido' })} type="radio" value="1" />
-                      <span>{optionB}</span>
+                      <span className="text-start">{optionB}</span>
                     </label>
                   )}
                 </div>
