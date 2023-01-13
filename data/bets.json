@@ -1,0 +1,49 @@
+[
+  {
+    "id": 1,
+    "title": "Champions League",
+    "background": "/images/assets/bg-bet-1.jpg",
+    "icon": "soccer",
+    "dates": "12/12/2022 - 14:30h",
+    "description": "La ultima oportunidad de AC Millan de pasar a la siguiente fase. ¿Quién ganará?",
+    "primary": "APUESTA YA",
+    "secondary": "APUESTAS ABIERTAS",
+    "secondaryIcon": "bet",
+    "optionA": "AC Millan",
+    "optionAImage": "/images/assets/bet-1-option-a.png",
+    "optionB": "Tottenham",
+    "optionBImage": "/images/assets/bet-1-option-b.png"
+  },
+  {
+    "id": 2,
+    "title": "Champions League"
+  },
+  {
+    "id": 3,
+    "title": "Champions League",
+    "icon": "soccer",
+    "fill": "fill-purple-text",
+    "dates": "11/10/2022 - 12:45h",
+    "description": "El Real Madrid se juega a su suerte después de su última derrota. ¿Podrá ganar?",
+    "primary": "APUESTA",
+    "optionA": "Real Madrid",
+    "optionAImage": "/images/assets/bet-2-option-a.png",
+    "optionB": "Celtic",
+    "optionBImage": "/images/assets/bet-2-option-b.png"
+  },
+  {
+    "id": 4,
+    "title": "NFL"
+  },
+  {
+    "id": 5,
+    "title": "",
+    "background": "/images/assets/bg-bet-1.jpg",
+    "icon": "football",
+    "fill": "fill-gray-text"
+  },
+  {
+    "id": 6,
+    "title": "Destacadas"
+  }
+]

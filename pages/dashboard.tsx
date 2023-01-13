@@ -1,12 +1,17 @@
+import { useAtom } from 'jotai';
 import React from 'react';
 
 import BetCard from 'components/elements/BetCard';
+import { betsAtom } from 'state/bet';
 
 type Props = {};
 
 const Dashboard: React.FC<Props> = (props: Props) => {
+  const [bets] = useAtom(betsAtom);
+
   return (
     <div className="min-h-full">
+      {!!bets.length && bets.map((bet) => <BetCard key={bet.id} {...bet} />)}
       <BetCard
         background="/images/assets/bg-bet-1.jpg"
         title={'Champions League'}
