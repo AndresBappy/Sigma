@@ -7,7 +7,7 @@ interface Props {
 }
 
 export const getBets = async () => {
-  const endpoint = `${process.env.NEXT_PUBLIC_BASE_URL}/api/bets`;
+  const endpoint = `/api/bets`;
 
   const options = {
     // signal: abortController.signal,
