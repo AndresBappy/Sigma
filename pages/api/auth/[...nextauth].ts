@@ -1,5 +1,10 @@
-import NextAuth from 'next-auth/next';
+import NextAuth, { User } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+
+import { connectToDatabase } from 'utils/database';
+import { validPassword } from 'utils/password';
+
+type ExtendedUser = User & { lastname?: string; id?: string };
 
 export const authOptions = {
   // Configure one or more authentication providers
@@ -18,8 +23,23 @@ export const authOptions = {
           throw new Error('Please enter email and password');
         }
 
-        if (email === 'test@example.com' && password === '1234q') {
-          const user = { id: '1', name: 'User Test', email: 'test@example.com' };
+        const db = await connectToDatabase();
+
+        const result = await db.collection('user').findOne({ email });
+
+        if (!result) {
+          throw new Error('Invalid credentials');
+        }
+
+        const valid = validPassword(password, result?.password);
+
+        if (result && valid) {
+          const user: ExtendedUser = {
+            id: result._id.toString(),
+            name: result.name,
+            lastname: result.lastname,
+            email: result.lastname,
+          };
 
           return user;
         } else {
