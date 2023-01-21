@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 
 import BetCard from 'components/elements/BetCard';
+import Navigation from 'components/elements/Navigation';
 import { Bet } from 'interfaces/bet';
 import { betsAtom, currentBetAtom } from 'state/bet';
 
@@ -96,6 +97,7 @@ const Dashboard: React.FC<Props> = (props: Props) => {
         fill={'fill-violet-gradient-to'}
         primary={'APUESTA'}
       />
+      <Navigation current="dashboard" />
     </div>
   );
 };
