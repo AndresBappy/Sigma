@@ -1,10 +1,18 @@
+import { getSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import { GetServerSideProps } from 'next/types';
+import React, { MutableRefObject, useRef, useState } from 'react';
+import Avatar from 'react-avatar';
+import ReactAvatarEditor from 'react-avatar-editor';
+import Dropzone from 'react-dropzone';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import BackIcon from 'public/images/icons/back.svg';
 import ProfileIcon from 'public/images/icons/profile.svg';
+import { getUploadUrl, saveAvatar, updateAvatarProfile } from 'services/user/avatar';
+import { dataURLtoBlob } from 'utils/dataURLtoBlob';
+import { cropToAvatarEditorConfig, getPicaInstance, replaceFileExtension } from 'utils/images';
 
 type Props = {};
 
@@ -24,10 +32,82 @@ const Profile: React.FC<Props> = (props: Props) => {
     formState: { errors },
   } = useForm<ProfileForm>();
   const router = useRouter();
+  const [scale, setScale] = useState(1);
+  const [image, setImage] = useState('');
+  const [name, setName] = useState('');
+  const checkShowModal = useRef<HTMLInputElement>(null);
+  const editor = useRef() as MutableRefObject<ReactAvatarEditor>;
+  const [avatar, setAvatar] = useState('');
+  const [preview, setPreview] = useState<Blob>();
+  const [error, setError] = useState('');
+  const allowZoomOut = false;
 
   const onSubmit: SubmitHandler<ProfileForm> = async (data: ProfileForm) => {
     console.log(data);
     router.push('/dashboard');
+  };
+
+  const handleUpload = async () => {
+    if (editor?.current) {
+      setError('');
+      const canvas = editor.current.getImage();
+      const config = cropToAvatarEditorConfig({
+        type: 'rect',
+        width: 200,
+        height: 200,
+      });
+
+      const offScreenCanvas = document.createElement('canvas');
+      offScreenCanvas.width = config.width < canvas.width ? config.width : canvas.width;
+      offScreenCanvas.height = config.height < canvas.height ? config.height : canvas.height;
+
+      const image = await getPicaInstance().resize(canvas, offScreenCanvas, {
+        alpha: true,
+      });
+      const dataUrl = image.toDataURL('image/png', 1.0);
+      const newFileName = replaceFileExtension(name);
+
+      const filename = encodeURIComponent(newFileName);
+      const fileType = encodeURIComponent('image/png');
+
+      const { url, fields } = await getUploadUrl(filename, fileType);
+
+      const file = await dataURLtoBlob(dataUrl);
+
+      const formData = new FormData();
+
+      Object.entries({ ...fields, file }).forEach(([key, value]) => {
+        formData.append(key, value as string);
+      });
+
+      const upload = await saveAvatar(url, formData);
+      if (upload.ok) {
+        // console.log('Uploaded successfully!');
+        setAvatar('');
+        setPreview(file);
+
+        await updateAvatarProfile(fields.key);
+
+        checkShowModal.current?.click();
+      } else {
+        setError('Upload failed.');
+
+        checkShowModal.current?.click();
+      }
+    }
+  };
+
+  const handleDrop = (dropped: any) => {
+    setScale(1);
+    setImage(dropped[0]);
+    setName(dropped[0].name);
+
+    checkShowModal.current?.click();
+  };
+
+  const handleScale = (e: React.FormEvent<HTMLInputElement>) => {
+    const scale = parseFloat(e.currentTarget.value);
+    setScale(scale);
   };
 
   return (
@@ -40,9 +120,21 @@ const Profile: React.FC<Props> = (props: Props) => {
       <h1 className="card-title text-2xl font-logo font-bold text-custom-purple pb-5">Completa tu perfil</h1>
       <p className="pb-5">y escoge un nombre de usuario para que puedas apostar con tus amigos.</p>
       <div className="flex mb-4 items-center justify-center">
-        <div className="rounded-full border-gray-text bg-white p-5 w-fit">
-          <ProfileIcon />
-        </div>
+        <Dropzone onDrop={handleDrop} noKeyboard>
+          {({ getRootProps, getInputProps }) => (
+            <div {...getRootProps()}>
+              {!avatar && !preview && (
+                <div className="rounded-full border-gray-text bg-white p-5 w-fit">
+                  <ProfileIcon />
+                </div>
+              )}
+              {avatar && <Avatar name={'user'} size={'100'} round="50px" src={avatar} />}
+              {preview && <Avatar name={'user'} size={'100'} round="50px" src={URL.createObjectURL(preview)} />}
+              <input {...getInputProps()} />
+              {!!error && <div>{error}</div>}
+            </div>
+          )}
+        </Dropzone>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <label className="block pb-5">
@@ -101,8 +193,54 @@ const Profile: React.FC<Props> = (props: Props) => {
           </button>
         </div>
       </form>
+      <label htmlFor="my-modal" className="cursor-pointer sr-only">
+        <span className="sr-only">Open modal</span>
+      </label>
+      <input type="checkbox" id="my-modal" className="modal-toggle" ref={checkShowModal} />
+      <div className="modal">
+        <div className="modal-box bg-white">
+          <ReactAvatarEditor ref={editor} width={300} height={300} image={image} scale={scale} />
+          <div>
+            <label>
+              Zoom:
+              <input
+                name="scale"
+                type="range"
+                onChange={handleScale}
+                min={allowZoomOut ? '0.1' : '1'}
+                max="2"
+                step="0.01"
+                defaultValue="1"
+              />
+            </label>
+          </div>
+          <div className="flex">
+            <button onClick={handleUpload}>Ok</button>
+            <label htmlFor="my-modal" className="cursor-pointer">
+              Cancel
+            </label>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
 export default Profile;
+
+export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: { session },
+  };
+};
