@@ -5,3 +5,10 @@ export interface RegisterForm {
   password: string;
   confirm: string;
 }
+
+export interface ProfileForm {
+  username: string;
+  phone: string;
+  country: string;
+  biography: string;
+}
