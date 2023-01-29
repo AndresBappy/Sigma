@@ -5,6 +5,9 @@ export interface User {
   name: string;
   lastname: string;
   email: string;
+  phone?: string;
+  country?: string;
+  biography?: string;
   avatar?: string;
   friends?: ObjectId[];
   handle?: string;

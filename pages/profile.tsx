@@ -9,21 +9,17 @@ import ReactAvatarEditor from 'react-avatar-editor';
 import Dropzone from 'react-dropzone';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
+import { Error } from 'interfaces/error';
+import { ProfileForm } from 'interfaces/user/form';
 import BackIcon from 'public/images/icons/back.svg';
 import ProfileIcon from 'public/images/icons/profile.svg';
 import { getUploadUrl, saveAvatar, updateAvatarProfile } from 'services/user/avatar';
-import { userAtom } from 'state/user';
+import { updateProfile } from 'services/user/profile';
+import { resetUserAtom, userAtom } from 'state/user';
 import { dataURLtoBlob } from 'utils/dataURLtoBlob';
 import { cropToAvatarEditorConfig, getPicaInstance, replaceFileExtension } from 'utils/images';
 
 type Props = {};
-
-interface ProfileForm {
-  username: string;
-  phone: string;
-  country: string;
-  biography: string;
-}
 
 const Profile: React.FC<Props> = (props: Props) => {
   const [user] = useAtom(userAtom);
@@ -32,6 +28,7 @@ const Profile: React.FC<Props> = (props: Props) => {
     register,
     handleSubmit,
     watch,
+    setError,
     formState: { errors },
   } = useForm<ProfileForm>();
   const router = useRouter();
@@ -42,17 +39,28 @@ const Profile: React.FC<Props> = (props: Props) => {
   const editor = useRef() as MutableRefObject<ReactAvatarEditor>;
   const [avatar, setAvatar] = useState('');
   const [preview, setPreview] = useState<Blob>();
-  const [error, setError] = useState('');
+  const [error, setAvatarError] = useState('');
   const allowZoomOut = false;
+  const [hydrated, setHydrated] = React.useState(false);
+  const [refresh, setRefresh] = useAtom(resetUserAtom);
 
   const onSubmit: SubmitHandler<ProfileForm> = async (data: ProfileForm) => {
-    console.log(data);
-    router.push('/settings');
+    const response = await updateProfile(data);
+
+    if (response.success === false) {
+      const errors: Array<Error> = response.error as Array<Error>;
+      if (errors.length) {
+        errors.forEach((error: Error) => setError(error.field as keyof ProfileForm, { message: error.message }));
+      }
+    } else {
+      await setRefresh(!refresh);
+      router.push('/settings');
+    }
   };
 
   const handleUpload = async () => {
     if (editor?.current) {
-      setError('');
+      setAvatarError('');
       const canvas = editor.current.getImage();
       const config = cropToAvatarEditorConfig({
         type: 'rect',
@@ -93,7 +101,7 @@ const Profile: React.FC<Props> = (props: Props) => {
 
         checkShowModal.current?.click();
       } else {
-        setError('Upload failed.');
+        setAvatarError('Upload failed.');
 
         checkShowModal.current?.click();
       }
@@ -118,6 +126,10 @@ const Profile: React.FC<Props> = (props: Props) => {
       setAvatar(user.avatar);
     }
   }, [user?.avatar]);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
 
   return (
     <div className="h-full px-2 pt-9">
@@ -147,64 +159,69 @@ const Profile: React.FC<Props> = (props: Props) => {
           </Dropzone>
         </div>
       </Suspense>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <label className="block pb-5">
-          <div className="flex justify-between">
-            <span className="block px-5 pb-2">Usuario</span>
-            {errors.username && <span className="text-right text-orange-text">{errors.username.message}</span>}
+      {hydrated && (
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <label className="block pb-5">
+            <div className="flex justify-between">
+              <span className="block px-5 pb-2">Usuario</span>
+              {errors.username && <span className="text-right text-orange-text">{errors.username.message}</span>}
+            </div>
+            <input
+              type="text"
+              placeholder="Tu nombre de usuario"
+              className="border-solid border-gray-text border py-4 px-6 w-full rounded text-gray-text bg-white"
+              defaultValue={user?.handle || ''}
+              {...register('username', { required: 'Nombre requerido' })}
+            />
+          </label>
+          <label className="block pb-5">
+            <div className="flex justify-between">
+              <span className="block px-5 pb-2">Celular</span>
+              {errors.phone && <span className="text-right text-orange-text">{errors.phone.message}</span>}
+            </div>
+            <input
+              type="text"
+              placeholder="Tu número celular"
+              className="border-solid border-gray-text border py-4 px-6 w-full rounded text-gray-text bg-white"
+              defaultValue={user?.phone || ''}
+              {...register('phone', { required: 'Número requerido' })}
+            />
+          </label>
+          <label className="block pb-5">
+            <div className="flex justify-between">
+              <span className="block px-5 pb-2">País</span>
+              {errors.country && <span className="text-right text-orange-text">{errors.country.message}</span>}
+            </div>
+            <select
+              className="select select-bordered w-full bg-white border-gray-text"
+              {...register('country', { required: 'Requerido' })}
+              defaultValue={user?.country || ''}
+            >
+              <option disabled value="">
+                Tu país de residencia
+              </option>
+              <option value="CO">Colombia</option>
+            </select>
+          </label>
+          <label className="block pb-5">
+            <div className="flex justify-between">
+              <span className="block px-5 pb-2">Bio</span>
+              {errors.biography && <span className="text-right text-orange-text">{errors.biography.message}</span>}
+            </div>
+            <textarea
+              {...register('biography', { required: 'Requerido' })}
+              className="textarea textarea-bordered h-24 bg-white w-full"
+              placeholder="Una pequeña descripción"
+              defaultValue={user?.biography || ''}
+            ></textarea>
+          </label>
+          <div className="text-center pt-2.5 pb-8">
+            <button type="submit" className="btn btn-primary">
+              Continuar
+            </button>
           </div>
-          <input
-            type="text"
-            placeholder="Tu nombre de usuario"
-            className="border-solid border-gray-text border py-4 px-6 w-full rounded text-gray-text bg-white"
-            {...register('username', { required: 'Nombre requerido' })}
-          />
-        </label>
-        <label className="block pb-5">
-          <div className="flex justify-between">
-            <span className="block px-5 pb-2">Celular</span>
-            {errors.phone && <span className="text-right text-orange-text">{errors.phone.message}</span>}
-          </div>
-          <input
-            type="text"
-            placeholder="Tu número celular"
-            className="border-solid border-gray-text border py-4 px-6 w-full rounded text-gray-text bg-white"
-            {...register('phone', { required: 'Número requerido' })}
-          />
-        </label>
-        <label className="block pb-5">
-          <div className="flex justify-between">
-            <span className="block px-5 pb-2">País</span>
-            {errors.country && <span className="text-right text-orange-text">{errors.country.message}</span>}
-          </div>
-          <select
-            className="select select-bordered w-full bg-white border-gray-text"
-            {...register('country', { required: 'Requerido' })}
-            value=""
-          >
-            <option disabled value="">
-              Tu país de residencia
-            </option>
-            <option value="CO">Colombia</option>
-          </select>
-        </label>
-        <label className="block pb-5">
-          <div className="flex justify-between">
-            <span className="block px-5 pb-2">Bio</span>
-            {errors.biography && <span className="text-right text-orange-text">{errors.biography.message}</span>}
-          </div>
-          <textarea
-            {...register('biography', { required: 'Requerido' })}
-            className="textarea textarea-bordered h-24 bg-white w-full"
-            placeholder="Una pequeña descripción"
-          ></textarea>
-        </label>
-        <div className="text-center pt-2.5 pb-8">
-          <button type="submit" className="btn btn-primary">
-            Continuar
-          </button>
-        </div>
-      </form>
+        </form>
+      )}
       <label htmlFor="my-modal" className="cursor-pointer sr-only">
         <span className="sr-only">Open modal</span>
       </label>

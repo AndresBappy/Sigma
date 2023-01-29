@@ -11,7 +11,7 @@ type Props = {
 
 const NextButton: React.FC<Props> = ({ href, label, icon }: Props) => {
   return (
-    <Link href={href} className="btn gap-2 normal-case w-full mb-4 bg-white justify-between">
+    <Link href={href || '/'} className="btn gap-2 normal-case w-full mb-4 bg-white justify-between">
       <div className="flex text-lg text-gray-text gap-2">
         <IconComponent name="soccer" fill="fill-purple-text" />
         <span className=" font-normal block">{label}</span>
