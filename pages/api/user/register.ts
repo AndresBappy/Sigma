@@ -41,7 +41,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
     const db = await connectToDatabase();
 
-    let result = await db.collection('user').findOne({ 'local.email': email });
+    let result = await db.collection('user').findOne({ email: email });
 
     if (result?._id) {
       errors.push({ field: 'email', message: 'Email registered' });

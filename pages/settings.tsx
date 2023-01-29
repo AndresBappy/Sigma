@@ -11,10 +11,10 @@ const Settings: React.FC<Props> = (props: Props) => {
     <div>
       <ProfileTitle />
       <div className=" mt-4">
-        <NextButton />
-        <NextButton />
-        <NextButton />
-        <NextButton />
+        <NextButton href="/profile" label="Editar perfil" />
+        <NextButton href="/" />
+        <NextButton href="/" />
+        <NextButton href="/" />
       </div>
       <Navigation current="settings" />
     </div>

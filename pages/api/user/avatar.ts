@@ -35,7 +35,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       const {
         user: { email },
       } = session;
-      console.log({ email, session });
 
       const db = await connectToDatabase();
 

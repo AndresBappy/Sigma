@@ -3,14 +3,18 @@ import React from 'react';
 
 import IconComponent from './Icon';
 
-type Props = {};
+type Props = {
+  href?: string;
+  label?: string;
+  icon?: string;
+};
 
-const NextButton: React.FC<Props> = (props: Props) => {
+const NextButton: React.FC<Props> = ({ href, label, icon }: Props) => {
   return (
-    <Link href="/dashboard" className="btn gap-2 normal-case w-full mb-4 bg-white justify-between">
+    <Link href={href} className="btn gap-2 normal-case w-full mb-4 bg-white justify-between">
       <div className="flex text-lg text-gray-text gap-2">
         <IconComponent name="soccer" fill="fill-purple-text" />
-        <span className=" font-normal block">Next</span>
+        <span className=" font-normal block">{label}</span>
       </div>
       <svg
         className="h-6 w-6 fill-current md:h-8 md:w-8"

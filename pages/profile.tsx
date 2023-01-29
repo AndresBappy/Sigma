@@ -1,8 +1,9 @@
+import { useAtom } from 'jotai';
 import { getSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next/types';
-import React, { MutableRefObject, useRef, useState } from 'react';
+import React, { MutableRefObject, Suspense, useEffect, useRef, useState } from 'react';
 import Avatar from 'react-avatar';
 import ReactAvatarEditor from 'react-avatar-editor';
 import Dropzone from 'react-dropzone';
@@ -11,6 +12,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import BackIcon from 'public/images/icons/back.svg';
 import ProfileIcon from 'public/images/icons/profile.svg';
 import { getUploadUrl, saveAvatar, updateAvatarProfile } from 'services/user/avatar';
+import { userAtom } from 'state/user';
 import { dataURLtoBlob } from 'utils/dataURLtoBlob';
 import { cropToAvatarEditorConfig, getPicaInstance, replaceFileExtension } from 'utils/images';
 
@@ -24,6 +26,7 @@ interface ProfileForm {
 }
 
 const Profile: React.FC<Props> = (props: Props) => {
+  const [user] = useAtom(userAtom);
   const {
     control,
     register,
@@ -44,7 +47,7 @@ const Profile: React.FC<Props> = (props: Props) => {
 
   const onSubmit: SubmitHandler<ProfileForm> = async (data: ProfileForm) => {
     console.log(data);
-    router.push('/dashboard');
+    router.push('/settings');
   };
 
   const handleUpload = async () => {
@@ -110,32 +113,40 @@ const Profile: React.FC<Props> = (props: Props) => {
     setScale(scale);
   };
 
+  useEffect(() => {
+    if (user?.avatar) {
+      setAvatar(user.avatar);
+    }
+  }, [user?.avatar]);
+
   return (
     <div className="h-full px-2 pt-9">
       <div className=" pb-5">
-        <Link href="/register" className="btn btn-circle bg-white">
+        <Link href="/settings" className="btn btn-circle bg-white">
           <BackIcon />
         </Link>
       </div>
       <h1 className="card-title text-2xl font-logo font-bold text-custom-purple pb-5">Completa tu perfil</h1>
       <p className="pb-5">y escoge un nombre de usuario para que puedas apostar con tus amigos.</p>
-      <div className="flex mb-4 items-center justify-center">
-        <Dropzone onDrop={handleDrop} noKeyboard>
-          {({ getRootProps, getInputProps }) => (
-            <div {...getRootProps()}>
-              {!avatar && !preview && (
-                <div className="rounded-full border-gray-text bg-white p-5 w-fit">
-                  <ProfileIcon />
-                </div>
-              )}
-              {avatar && <Avatar name={'user'} size={'100'} round="50px" src={avatar} />}
-              {preview && <Avatar name={'user'} size={'100'} round="50px" src={URL.createObjectURL(preview)} />}
-              <input {...getInputProps()} />
-              {!!error && <div>{error}</div>}
-            </div>
-          )}
-        </Dropzone>
-      </div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <div className="flex mb-4 items-center justify-center">
+          <Dropzone onDrop={handleDrop} noKeyboard>
+            {({ getRootProps, getInputProps }) => (
+              <div {...getRootProps()}>
+                {!avatar && !preview && (
+                  <div className="rounded-full border-gray-text bg-white p-5 w-fit">
+                    <ProfileIcon />
+                  </div>
+                )}
+                {avatar && <Avatar name={'user'} size={'100'} round="50px" src={avatar} />}
+                {preview && <Avatar name={'user'} size={'100'} round="50px" src={URL.createObjectURL(preview)} />}
+                <input {...getInputProps()} />
+                {!!error && <div>{error}</div>}
+              </div>
+            )}
+          </Dropzone>
+        </div>
+      </Suspense>
       <form onSubmit={handleSubmit(onSubmit)}>
         <label className="block pb-5">
           <div className="flex justify-between">
@@ -169,8 +180,9 @@ const Profile: React.FC<Props> = (props: Props) => {
           <select
             className="select select-bordered w-full bg-white border-gray-text"
             {...register('country', { required: 'Requerido' })}
+            value=""
           >
-            <option disabled selected value="">
+            <option disabled value="">
               Tu país de residencia
             </option>
             <option value="CO">Colombia</option>
