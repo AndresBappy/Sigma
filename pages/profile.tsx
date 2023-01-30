@@ -83,23 +83,31 @@ const Profile: React.FC<Props> = (props: Props) => {
 
       const { url, fields } = await getUploadUrl(filename, fileType);
 
-      const file = await dataURLtoBlob(dataUrl);
+      if (url) {
+        const file = await dataURLtoBlob(dataUrl);
 
-      const formData = new FormData();
+        const formData = new FormData();
 
-      Object.entries({ ...fields, file }).forEach(([key, value]) => {
-        formData.append(key, value as string);
-      });
+        Object.entries({ ...fields, file }).forEach(([key, value]) => {
+          formData.append(key, value as string);
+        });
 
-      const upload = await saveAvatar(url, formData);
-      if (upload.ok) {
-        // console.log('Uploaded successfully!');
-        setAvatar('');
-        setPreview(file);
+        const upload = await saveAvatar(url, formData);
+        if (upload.ok) {
+          // console.log('Uploaded successfully!');
+          // setAvatar('');
+          // setPreview(file);
 
-        await updateAvatarProfile(fields.key);
+          await updateAvatarProfile(fields.key);
 
-        checkShowModal.current?.click();
+          await setRefresh(!refresh);
+
+          checkShowModal.current?.click();
+        } else {
+          setAvatarError('Upload failed.');
+
+          checkShowModal.current?.click();
+        }
       } else {
         setAvatarError('Upload failed.');
 
@@ -243,11 +251,17 @@ const Profile: React.FC<Props> = (props: Props) => {
               />
             </label>
           </div>
-          <div className="flex">
-            <button onClick={handleUpload}>Ok</button>
-            <label htmlFor="my-modal" className="cursor-pointer">
-              Cancel
-            </label>
+          <div className="modal-action flex-col text-center">
+            <div className="mb-2">
+              <button className="btn btn-primary w-full" onClick={handleUpload}>
+                Ok
+              </button>
+            </div>
+            <div className="mb-2">
+              <label htmlFor="my-modal" className="cursor-pointer">
+                Cancel
+              </label>
+            </div>
           </div>
         </div>
       </div>
