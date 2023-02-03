@@ -3,18 +3,33 @@ import React from 'react';
 
 import IconComponent from './Icon';
 
+type buttonType = 'primary' | 'secondary';
+
 type Props = {
   href?: string;
   label?: string;
   icon?: string;
+  type?: buttonType;
 };
 
-const NextButton: React.FC<Props> = ({ href, label, icon }: Props) => {
+const NextButton: React.FC<Props> = ({ href, label, type, icon }: Props) => {
+  const background = type === 'primary' ? 'btn-primary bg-primary text-white rounded-lg p-3' : undefined;
+  const containerStyle = type === 'primary' ? 'text-white flex-col' : 'text-gray-text';
+
   return (
-    <Link href={href || '/'} className="btn gap-2 normal-case w-full mb-4 bg-white justify-between">
-      <div className="flex text-lg text-gray-text gap-2">
+    <Link
+      href={href || '/'}
+      className={`btn flex-1 gap-2 normal-case w-full h-full mb-4 bg-white justify-between ${background}`}
+    >
+      <div className={`flex justify-around text-lg text-gray-text gap-2 ${containerStyle}`}>
         <IconComponent name="soccer" fill="fill-purple-text" />
-        <span className=" font-normal block">{label}</span>
+        {type === 'primary' ? (
+          <div>
+            <span className=" font-normal block">{label}</span>
+          </div>
+        ) : (
+          <span className=" font-normal block">{label}</span>
+        )}
       </div>
       <svg
         className="h-6 w-6 fill-current md:h-8 md:w-8"

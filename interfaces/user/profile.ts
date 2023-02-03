@@ -13,4 +13,5 @@ export interface User {
   handle?: string;
   createdAt: number;
   updatedAt: number;
+  balance: number;
 }
