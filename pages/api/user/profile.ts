@@ -31,6 +31,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         });
       }
 
+      const sum = await db
+        .collection('transaction')
+        .aggregate([
+          { $match: { userId: result._id /*, status: 3 */ } },
+          {
+            $group: {
+              _id: null,
+              totalAmount: { $sum: '$value' },
+            },
+          },
+        ])
+        .toArray();
+
       const user: User = {
         _id: result?._id,
         name: result.name,
@@ -43,6 +56,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         avatar: result.avatar ? `${process.env.AWS_URL}/${result.avatar}` : undefined,
         createdAt: result.createdAt,
         updatedAt: result.updatedAt,
+        balance: (sum.length && sum[0].totalAmount) || 0,
       };
 
       res.status(HttpStatusCode.OK).json({ success: true, user });
