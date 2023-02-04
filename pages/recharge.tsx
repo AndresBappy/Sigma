@@ -201,7 +201,9 @@ const Recharge: React.FC<Props> = (props: Props) => {
           <button
             type="submit"
             className="btn btn-primary"
-            disabled={!sendTransaction && !isConnected && !!chains.length && !!chain?.id && chains[0].id === chain?.id}
+            disabled={
+              (!transactionLoading && !isConnected) || !chains.length || !chain?.id || chains[0].id !== chain?.id
+            }
           >
             Pagar
             {transactionLoading && <>Loading</>}
