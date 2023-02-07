@@ -8,6 +8,10 @@ import Soccer from 'public/images/icons/soccer.svg';
 import Star from 'public/images/icons/star.svg';
 import Tennis from 'public/images/icons/tennis.svg';
 import Golf from 'public/images/icons/golf.svg';
+import Home from 'public/images/icons/home.svg';
+import User from 'public/images/icons/user.svg';
+import Events from 'public/images/icons/events.svg';
+import Deposit from 'public/images/icons/deposit.svg';
 
 type iconType = {
   [key: string]: React.ElementType<HTMLElement & SVGElement>;
@@ -21,6 +25,10 @@ const icons: iconType = {
   tennis: Tennis,
   bet: Bet,
   golf: Golf,
+  home: Home,
+  user: User,
+  events: Events,
+  deposit: Deposit,
 };
 
 type Props = {
