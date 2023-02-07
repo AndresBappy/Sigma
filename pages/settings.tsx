@@ -40,9 +40,9 @@ const Settings: React.FC<Props> = (props: Props) => {
       </div>
       <div className=" mt-4">
         <NextButton href="/profile" label="Editar perfil" />
-        <NextButton href="/" />
-        <NextButton href="/" />
-        <NextButton href="/" />
+        <NextButton href="/" label="Amigos"/>
+        <NextButton href="/" label="Ayuda"/>
+        <NextButton href="/" label="Cerrar sesión"/>
       </div>
       <Navigation current="settings" />
     </div>
